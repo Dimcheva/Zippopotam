@@ -1,6 +1,6 @@
 import Config.BaseConfig;
 import org.junit.Test;
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 
 
 public class Test1 extends BaseConfig {
@@ -8,14 +8,30 @@ public class Test1 extends BaseConfig {
 
 
     @Test
-    public void checkResponseCode200(){
-                given().
-                        spec(zippoReqst).
-                when().
-                        get("bg/4000" ).
-                then().
-                        spec(zippoResp);
+    public void checkResponseCode(){
+                given()
+                        .spec(zippoReqst)
+                        .log()
+                        .all()
+                .when()
+                        .get("bg/4000" )
+                .then()
+                        .spec(zippoSuccResp)
+                        .log()
+                        .all();
 
-
+    }
+    @Test
+    public void incorrectCheck(){
+            given()
+                    .spec(zippoReqst)
+                    .log()
+                    .all()
+            .when()
+                    .get("/rus/90210")
+            .then()
+                    .spec(zippoFailResp)
+                    .log()
+                    .all();
     }
 }
